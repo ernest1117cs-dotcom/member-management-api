@@ -183,3 +183,51 @@ POST / PUT / DELETE
 - Unit / Integration Test 擴充
 - HTTPS + Domain
 - 改善 CI/CD 部署安全性
+
+---
+
+### 專案架構圖
+                  ┌──────────────────────┐
+                  │      Frontend        │
+                  │ HTML / CSS / JS      │
+                  └──────────┬───────────┘
+                             │ HTTP + JWT
+                             ▼
+                  ┌──────────────────────┐
+                  │    Spring Boot       │
+                  │      REST API        │
+                  └──────────┬───────────┘
+                             │
+                  ┌──────────▼───────────┐
+                  │   Spring Security    │
+                  │     JWT + RBAC       │
+                  └──────────┬───────────┘
+                             │
+                  ┌──────────▼───────────┐
+                  │    Service Layer     │
+                  └──────┬────────┬──────┘
+                         │        │
+                         ▼        ▼
+                  ┌──────────┐ ┌──────────┐
+                  │  Redis   │ │  MySQL   │
+                  │  Cache   │ │ Database │
+                  └──────────┘ └──────────┘
+
+                 ───── Deployment ─────
+
+GitHub
+   │
+   │ git push
+   ▼
+GitHub Actions
+   │
+   │ CI/CD
+   ▼
+AWS EC2
+   │
+   ▼
+Docker Compose
+   │
+   ├── Spring Boot
+   ├── MySQL
+   └── Redis
