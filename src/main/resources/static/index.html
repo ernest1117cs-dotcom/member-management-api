@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>會員管理系統</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>會員管理系統</h1>
+
+    <!-- 登入區 -->
+    <section id="login-section">
+        <h2>登入</h2>
+
+        <div>
+            <label for="username">帳號</label>
+            <input
+                    type="text"
+                    id="username"
+                    placeholder="請輸入帳號"
+            >
+        </div>
+
+        <div>
+            <label for="password">密碼</label>
+            <input
+                    type="password"
+                    id="password"
+                    placeholder="請輸入密碼"
+            >
+        </div>
+
+        <button id="login-button">
+            登入
+        </button>
+
+        <p id="login-message"></p>
+    </section>
+
+
+    <!-- 登入成功後的會員管理區 -->
+    <section id="member-section" style="display: none;">
+
+        <div class="member-header">
+            <h2>會員列表</h2>
+
+            <button id="logout-button">
+                登出
+            </button>
+        </div>
+
+        <p>
+            目前登入：
+            <strong id="current-user"></strong>
+        </p>
+
+        <p>
+            權限：
+            <strong id="current-role"></strong>
+        </p>
+
+
+        <!-- ADMIN 新增會員區 -->
+        <div id="admin-section" style="display: none;">
+
+            <h3>新增會員</h3>
+
+            <input
+                    type="text"
+                    id="member-name"
+                    placeholder="姓名"
+            >
+
+            <input
+                    type="email"
+                    id="member-email"
+                    placeholder="Email"
+            >
+
+            <input
+                    type="number"
+                    id="member-age"
+                    placeholder="年齡"
+            >
+
+            <select id="member-status">
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="INACTIVE">INACTIVE</option>
+            </select>
+
+            <button id="add-member-button">
+                新增會員
+            </button>
+
+        </div>
+
+
+        <!-- 會員資料表 -->
+        <table>
+
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>姓名</th>
+                <th>Email</th>
+                <th>年齡</th>
+                <th>狀態</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+
+            <tbody id="member-table-body">
+            <!-- JavaScript 會把會員資料放在這裡 -->
+            </tbody>
+
+        </table>
+
+    </section>
+
+</div>
+
+<!-- JavaScript -->
+<script src="app.js"></script>
+
+</body>
+
+</html>

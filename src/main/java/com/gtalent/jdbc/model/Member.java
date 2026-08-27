@@ -1,6 +1,7 @@
 package com.gtalent.jdbc.model;
 
 import java.time.LocalDateTime;
+import java.io.Serializable;
 
 /**
  * Member 模型（對應資料表：member）
@@ -11,7 +12,9 @@ import java.time.LocalDateTime;
  * - email: 會員電子郵件 (唯一)
  * - age: 年齡
  */
-public class Member {
+public class Member implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private int id;
     private String name;
     private String email;

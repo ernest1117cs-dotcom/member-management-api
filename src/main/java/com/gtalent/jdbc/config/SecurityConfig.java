@@ -46,8 +46,7 @@ public class SecurityConfig {
                         // 沒登入或 Token 無效 → 401
                         .authenticationEntryPoint(
                                 (request, response, authException) -> {
-                                    response.setStatus(
-                                            HttpServletResponse.SC_UNAUTHORIZED
+                                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED
                                     );
                                 }
                         )
@@ -64,6 +63,16 @@ public class SecurityConfig {
 
                 // API 權限設定
                 .authorizeHttpRequests(auth -> auth
+
+
+                        // 前端靜態檔案不用登入
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/style.css",
+                                "/app.js",
+                                "/favicon.ico")
+                        .permitAll()
 
                         // 註冊、登入不需要 JWT
                         .requestMatchers("/auth/**")
