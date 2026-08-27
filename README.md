@@ -215,19 +215,19 @@ POST / PUT / DELETE
 
                  ───── Deployment ─────
 
-GitHub
-   │
-   │ git push
-   ▼
-GitHub Actions
-   │
-   │ CI/CD
-   ▼
-AWS EC2
-   │
-   ▼
-Docker Compose
-   │
-   ├── Spring Boot
-   ├── MySQL
-   └── Redis
+```mermaid
+flowchart TD
+    A[GitHub]
+    B[GitHub Actions]
+    C[AWS EC2]
+    D[Docker Compose]
+    E[Spring Boot]
+    F[MySQL]
+    G[Redis]
+
+    A -->|git push| B
+    B -->|CI/CD| C
+    C --> D
+    D --> E
+    D --> F
+    D --> G
