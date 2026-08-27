@@ -5,7 +5,6 @@ import com.gtalent.jdbc.dto.RegisterRequest;
 import com.gtalent.jdbc.entity.AppUser;
 import com.gtalent.jdbc.repository.AppUserRepository;
 import com.gtalent.jdbc.service.JwtService;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +40,9 @@ public class AuthController {
                 passwordEncoder.encode(request.password())
         );
 
+        // 一般註冊帳號預設只能是 USER
+        user.setRole("USER");
+
         appUserRepository.save(user);
 
         return ResponseEntity.ok("註冊成功");
@@ -72,7 +74,10 @@ public class AuthController {
                     .body("帳號或密碼錯誤");
         }
 
-        String token = jwtService.generateToken(user.getUsername());
+        String token = jwtService.generateToken(
+                user.getUsername(),
+                user.getRole()
+        );
 
         return ResponseEntity.ok(token);
     }

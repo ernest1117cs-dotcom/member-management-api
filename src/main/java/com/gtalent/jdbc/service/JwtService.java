@@ -3,12 +3,12 @@ package com.gtalent.jdbc.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class JwtService {
@@ -25,10 +25,11 @@ public class JwtService {
     }
 
     // 產生 Token
-    public String generateToken(String username) {
+    public String generateToken(String username, String role) {
 
         return Jwts.builder()
                 .subject(username)
+                .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(
                         new Date(System.currentTimeMillis() + EXPIRATION_TIME)
@@ -47,6 +48,18 @@ public class JwtService {
                 .getPayload();
 
         return claims.getSubject();
+    }
+
+    // 從 Token 取得 role
+    public String extractRole(String token) {
+
+        Claims claims = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        return claims.get("role", String.class);
     }
 
     // 驗證 Token
