@@ -91,34 +91,6 @@
 
 ---
 
-## System Architecture
-
-Frontend
-↓
-Spring Boot REST API
-↓
-Spring Security
-↓
-JWT Authentication + RBAC
-↓
-Service Layer
-↓
-Redis Cache / MySQL
-↓
-Docker
-↓
-AWS EC2
-
-GitHub Push
-↓
-GitHub Actions
-↓
-SSH EC2
-↓
-Docker Build & Deploy
-
----
-
 ## Redis Cache Flow
 
 第一次查詢會員：
