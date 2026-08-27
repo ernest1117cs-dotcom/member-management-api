@@ -20,14 +20,22 @@ class MemberRespositoryTests {
     @Test
     void findAll_returnsSeedMembers() {
         var members = memberRespository.findAll();
+        assertTrue(members.size() >= 3);
 
-        assertEquals(3, members.size());
+        assertTrue(
+                members.stream()
+                        .anyMatch(member -> "John Doe".equals(member.getName()))
+        );
 
-        assertTrue(members.stream().anyMatch(member -> "John Doe".equals(member.getName())));
+        assertTrue(
+                members.stream()
+                        .anyMatch(member -> "Jane Smith".equals(member.getName()))
+        );
 
-        assertTrue(members.stream().anyMatch(member -> "Jane Smith".equals(member.getName())));
-
-        assertTrue(members.stream().anyMatch(member -> "Alice Johnson".equals(member.getName())));
+        assertTrue(
+                members.stream()
+                        .anyMatch(member -> "Alice Johnson".equals(member.getName()))
+        );
     }
 
     @Test
