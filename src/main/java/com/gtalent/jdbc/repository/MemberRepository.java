@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.List;
 
 @Repository
-public class MemberRespository {
+public class MemberRepository {
     /**
      * Repository: 直接與資料庫互動，集中管理會員資料表的 SQL。
      *
@@ -23,7 +23,7 @@ public class MemberRespository {
      */
     private final JdbcTemplate jdbcTemplate;
 
-    public MemberRespository(JdbcTemplate jdbcTemplate) {
+    public MemberRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

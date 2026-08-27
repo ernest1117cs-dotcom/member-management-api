@@ -11,15 +11,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class MemberRespositoryTests {
+class MemberRepositoryTests {
     @Autowired
-    private MemberRespository memberRespository;
+    private MemberRepository memberRepository;
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Test
     void findAll_returnsSeedMembers() {
-        var members = memberRespository.findAll();
+        var members = memberRepository.findAll();
         assertTrue(members.size() >= 3);
 
         assertTrue(
@@ -44,7 +44,7 @@ class MemberRespositoryTests {
         // ===== Create =====
         Member member = new Member("Test User", "test-user@example.com", 31);
 
-        Member savedMember = memberRespository.save(member);
+        Member savedMember = memberRepository.save(member);
 
         assertNotNull(savedMember);
         assertTrue(savedMember.getId() > 0);
@@ -64,7 +64,7 @@ class MemberRespositoryTests {
         assertNotNull(memberId);
 
         Member foundMember =
-                memberRespository.findById(memberId.longValue());
+                memberRepository.findById(memberId.longValue());
 
         assertNotNull(foundMember);
         assertEquals("Test User", foundMember.getName());
@@ -76,11 +76,11 @@ class MemberRespositoryTests {
         foundMember.setName("Updated User");
         foundMember.setAge(32);
 
-        int updated = memberRespository.update(foundMember);
+        int updated = memberRepository.update(foundMember);
 
         assertEquals(1, updated);
 
-        Member updatedMember = memberRespository.findById(memberId.longValue());
+        Member updatedMember = memberRepository.findById(memberId.longValue());
 
         assertNotNull(updatedMember);
         assertEquals("Updated User", updatedMember.getName());
@@ -88,11 +88,11 @@ class MemberRespositoryTests {
 
 
         // ===== Delete =====
-        int deleted = memberRespository.deleteById(memberId);
+        int deleted = memberRepository.deleteById(memberId);
 
         assertEquals(1, deleted);
 
-        Member deletedMember = memberRespository.findById(memberId.longValue());
+        Member deletedMember = memberRepository.findById(memberId.longValue());
 
         assertNull(deletedMember);
     }

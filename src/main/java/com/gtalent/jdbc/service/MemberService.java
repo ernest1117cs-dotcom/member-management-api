@@ -2,38 +2,47 @@ package com.gtalent.jdbc.service;
 
 import com.gtalent.jdbc.exception.MemberNotFoundException;
 import com.gtalent.jdbc.model.Member;
-import com.gtalent.jdbc.repository.MemberRespository;
+import com.gtalent.jdbc.repository.MemberRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * 會員服務層
+ * 負責會員相關商業邏輯、資料存取協調與快取管理。
+ */
 @Service
 public class MemberService {
 
-    private final MemberRespository memberRespository;
+    private final MemberRepository memberRepository;
 
-    public MemberService(MemberRespository memberRespository) {
-        this.memberRespository = memberRespository;
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 
-    // 查詢全部會員
-    // 第一次查 MySQL，之後從 Redis Cache 取得
-    @Cacheable("members")
+    /**
+     * 取得所有會員。
+     * 查詢結果會儲存於 Redis Cache。
+     */
+    @Cacheable(value = "members")
     public List<Member> getAllMembers() {
-        return memberRespository.findAll();
+        return memberRepository.findAll();
     }
 
-    // 依姓名搜尋會員
+    /**
+     * 依姓名搜尋會員。
+     */
     public List<Member> searchMembersByName(String name) {
-        return memberRespository.findByName(name);
+        return memberRepository.findByName(name);
     }
 
-    // 依 id 查詢會員
+    /**
+     * 依 ID 查詢會員。
+     */
     public Member getMemberById(Long id) {
-
-        Member member = memberRespository.findById(id);
+        Member member = memberRepository.findById(id);
 
         if (member == null) {
             throw new MemberNotFoundException(id);
@@ -42,42 +51,46 @@ public class MemberService {
         return member;
     }
 
-    // 新增會員
-    // 資料變更後清除 members Cache
+    /**
+     * 新增會員，並清除會員列表快取。
+     */
     @CacheEvict(value = "members", allEntries = true)
     public Member createMember(Member member) {
-        return memberRespository.save(member);
+        return memberRepository.save(member);
     }
 
-    // 修改會員
+    /**
+     * 更新會員，並清除會員列表快取。
+     */
     @CacheEvict(value = "members", allEntries = true)
     public Member updateMember(Member member) {
-
-        int updated = memberRespository.update(member);
+        int updated = memberRepository.update(member);
 
         if (updated == 0) {
             throw new MemberNotFoundException((long) member.getId());
         }
 
-        return memberRespository.findById((long) member.getId());
+        return memberRepository.findById((long) member.getId());
     }
 
-    // 刪除會員
+    /**
+     * 刪除指定會員，並清除會員列表快取。
+     */
     @CacheEvict(value = "members", allEntries = true)
     public void deleteMemberById(Long id) {
-
-        int deleted = memberRespository.deleteById(id.intValue());
+        int deleted = memberRepository.deleteById(id.intValue());
 
         if (deleted == 0) {
             throw new MemberNotFoundException(id);
         }
     }
 
-    // 修改會員狀態
+    /**
+     * 修改會員狀態。
+     */
     @CacheEvict(value = "members", allEntries = true)
     public Member updateMemberStatus(Long id, String status) {
-
-        Member member = memberRespository.findById(id);
+        Member member = memberRepository.findById(id);
 
         if (member == null) {
             throw new MemberNotFoundException(id);
@@ -89,19 +102,23 @@ public class MemberService {
             );
         }
 
-        memberRespository.updateStatus(id, status);
+        memberRepository.updateStatus(id, status);
 
-        return memberRespository.findById(id);
+        return memberRepository.findById(id);
     }
 
-    // 刪除全部會員
+    /**
+     * 刪除所有會員，並清除會員列表快取。
+     */
     @CacheEvict(value = "members", allEntries = true)
     public int deleteAllMembers() {
-        return memberRespository.deleteAll();
+        return memberRepository.deleteAll();
     }
 
-    // 分頁查詢
+    /**
+     * 分頁取得會員。
+     */
     public List<Member> getMembersWithPagination(int page, int size) {
-        return memberRespository.findAllWithPagination(page, size);
+        return memberRepository.findAllWithPagination(page, size);
     }
 }
