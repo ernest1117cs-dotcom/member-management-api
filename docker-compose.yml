@@ -8,16 +8,16 @@ services:
       MYSQL_DATABASE: member_db
       MYSQL_ROOT_PASSWORD: root
     ports:
-    - "3307:3306"
+      - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     restart: unless-stopped
-  healthcheck:
-    test: ["CMD-SHELL", "curl -fsS http://localhost:8080/v3/api-docs > /dev/null || exit 1"]
-    interval: 15s
-    timeout: 5s
-    retries: 5
-    start_period: 30s
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -proot || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   app:
     build:
@@ -38,7 +38,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/api/members > /dev/null || exit 1"]
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/v3/api-docs > /dev/null || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 5
