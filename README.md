@@ -187,47 +187,45 @@ POST / PUT / DELETE
 ---
 
 ### 專案架構圖
-                  ┌──────────────────────┐
-                  │      Frontend        │
-                  │ HTML / CSS / JS      │
-                  └──────────┬───────────┘
-                             │ HTTP + JWT
-                             ▼
-                  ┌──────────────────────┐
-                  │    Spring Boot       │
-                  │      REST API        │
-                  └──────────┬───────────┘
-                             │
-                  ┌──────────▼───────────┐
-                  │   Spring Security    │
-                  │     JWT + RBAC       │
-                  └──────────┬───────────┘
-                             │
-                  ┌──────────▼───────────┐
-                  │    Service Layer     │
-                  └──────┬────────┬──────┘
-                         │        │
-                         ▼        ▼
-                  ┌──────────┐ ┌──────────┐
-                  │  Redis   │ │  MySQL   │
-                  │  Cache   │ │ Database │
-                  └──────────┘ └──────────┘
-
-                 ───── Deployment ─────
 
 ```mermaid
 flowchart TD
-    A[GitHub]
-    B[GitHub Actions]
-    C[AWS EC2]
-    D[Docker Compose]
-    E[Spring Boot]
-    F[MySQL]
-    G[Redis]
 
-    A -->|git push| B
-    B -->|CI/CD| C
-    C --> D
-    D --> E
-    D --> F
-    D --> G
+    %% Client
+    USER["使用者 / Browser"]
+    FRONT["Frontend<br/>HTML + CSS + JavaScript"]
+
+    %% Backend
+    API["Spring Boot<br/>REST API"]
+    SEC["Spring Security<br/>JWT Authentication + RBAC"]
+    SERVICE["Service Layer"]
+
+    %% Data
+    REDIS[("Redis<br/>Cache")]
+    MYSQL[("MySQL<br/>Database")]
+
+    %% Deployment
+    GITHUB["GitHub Repository"]
+    ACTIONS["GitHub Actions<br/>CI/CD"]
+    EC2["AWS EC2"]
+    DOCKER["Docker Compose"]
+
+    %% Application Flow
+    USER --> FRONT
+    FRONT -->|"HTTP Request + JWT"| API
+    API --> SEC
+    SEC --> SERVICE
+    SERVICE -->|"Cache"| REDIS
+    SERVICE -->|"JDBC"| MYSQL
+
+    %% Deployment Flow
+    GITHUB -->|"git push"| ACTIONS
+    ACTIONS -->|"Automatic Deploy"| EC2
+    EC2 --> DOCKER
+
+    %% Docker Services
+    DOCKER --> API
+    DOCKER --> MYSQL
+    DOCKER --> REDIS
+```
+      
